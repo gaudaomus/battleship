@@ -36,12 +36,14 @@ const Gameboard = () => {
 
   let allShips = [shipOne, shipTwo, shipThree, shipFour, shipFive];
   let missedShots = [];
+  let hitShots = [];
 
   const receiveAttack = (shot) => {
     let misses = 0;
     for (let i = 0; i < allShips.length; i++) {
       if (allShips[i].position.indexOf(shot) >= 0) {
         allShips[i].hit(shot);
+        hitShots.push(shot);
       } else {
         misses += 1;
       }
@@ -68,6 +70,7 @@ const Gameboard = () => {
   };
 
   return {
+    hitShots,
     missedShots,
     receiveAttack,
     allSunk,
@@ -79,4 +82,22 @@ const Gameboard = () => {
   };
 };
 
-export { Ship, Gameboard };
+const Player = (enemyBoard) => {
+  let activeTurn = false;
+
+  const fireShot = (shot) => {
+    if (
+      activeTurn === true &&
+      !(enemyBoard.hitShots.indexOf(shot) >= 0) &&
+      !(enemyBoard.missedShots.indexOf(shot) >= 0)
+    ) {
+      enemyBoard.receiveAttack(shot);
+    } else {
+      fireShot();
+    }
+  };
+
+  return { fireShot, activeTurn };
+};
+
+export { Ship, Gameboard, Player };
