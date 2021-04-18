@@ -51,7 +51,32 @@ const Gameboard = () => {
     }
   };
 
-  return { missedShots, receiveAttack, shipOne, shipTwo, shipThree, shipFour, shipFive };
+  const allSunk = () => {
+    let sunk = 0;
+    for (let i = 0; i < allShips.length; i++) {
+      if (allShips[i].isSunk() === false) {
+        break;
+      } else {
+        sunk += 1;
+      }
+    }
+    if (sunk === allShips.length) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  return {
+    missedShots,
+    receiveAttack,
+    allSunk,
+    shipOne,
+    shipTwo,
+    shipThree,
+    shipFour,
+    shipFive,
+  };
 };
 
 export { Ship, Gameboard };
